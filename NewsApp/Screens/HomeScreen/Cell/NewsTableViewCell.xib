@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Roboto-Medium.ttf">
+            <string>Roboto-Medium</string>
+        </array>
+        <array key="Roboto-Regular.ttf">
+            <string>Roboto-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="351" id="KGk-i7-Jjw" customClass="NewsTableViewCell" customModule="NewsApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="519" height="195"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="519" height="195"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1dD-PS-LOH">
+                        <rect key="frame" x="8" y="8" width="150" height="150"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="150" id="flo-RE-LVr"/>
+                            <constraint firstAttribute="height" constant="150" id="x4h-IH-5SL"/>
+                        </constraints>
+                    </imageView>
+                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="fgC-EH-1rO">
+                        <rect key="frame" x="174" y="8" width="337" height="179"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="none" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nfw-0h-Due">
+                                <rect key="frame" x="0.0" y="0.0" width="337" height="159.5"/>
+                                <fontDescription key="fontDescription" name="Roboto-Medium" family="Roboto" pointSize="16"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="none" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jl7-hT-HMx">
+                                <rect key="frame" x="0.0" y="162.5" width="337" height="16.5"/>
+                                <fontDescription key="fontDescription" name="Roboto-Regular" family="Roboto" pointSize="14"/>
+                                <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                    </stackView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="fgC-EH-1rO" firstAttribute="leading" secondItem="1dD-PS-LOH" secondAttribute="trailing" constant="16" id="IB9-Vl-cUV"/>
+                    <constraint firstAttribute="trailing" secondItem="fgC-EH-1rO" secondAttribute="trailing" constant="8" id="O2j-Md-wPl"/>
+                    <constraint firstAttribute="bottom" secondItem="fgC-EH-1rO" secondAttribute="bottom" constant="8" id="PBh-Bw-qvW"/>
+                    <constraint firstItem="1dD-PS-LOH" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="PIN-Pp-zQT"/>
+                    <constraint firstItem="1dD-PS-LOH" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="VBo-zZ-Jog"/>
+                    <constraint firstItem="fgC-EH-1rO" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="ktC-hA-ujA"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="descriptionLabel" destination="jl7-hT-HMx" id="rsX-nq-Mze"/>
+                <outlet property="newsImageView" destination="1dD-PS-LOH" id="776-y0-Q2M"/>
+                <outlet property="titleLabel" destination="Nfw-0h-Due" id="R3Z-ga-ogd"/>
+            </connections>
+            <point key="canvasLocation" x="281.8840579710145" y="148.32589285714286"/>
+        </tableViewCell>
+    </objects>
+</document>
