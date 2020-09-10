@@ -19,12 +19,24 @@ enum APIError: Error {
 	case internalServerError
 }
 
-class APIClient {
+enum ArticleURLs: String {
+	case articles = "https://moedemo-93e2e.firebaseapp.com/assignment/NewsApp/articles.json"
+}
+
+protocol NewsAPI {
+	typealias NewsResult = (Result<[Article], Error>) -> Void
+	func newsAPIRequest(_ handler: @escaping NewsAPI.NewsResult)
+}
+
+//MARK: Api request using URLsession
+
+class APIClient: NewsAPI {
 
 	let session = URLSession.shared
 
-	func newsAPIRequest(handler: @escaping (Result<[Article], Error>) -> Void) {
-		guard let url = URL(string: "https://moedemo-93e2e.firebaseapp.com/assignment/NewsApp/articles.json") else {
+	func newsAPIRequest(_ handler: @escaping NewsAPI.NewsResult) {
+
+		guard let url = URL(string: ArticleURLs.articles.rawValue) else {
 			return
 		}
 		let task = session.dataTask(with: url, completionHandler: {data, response, error in
@@ -42,3 +54,5 @@ class APIClient {
 		task.resume()
 	}
 }
+
+

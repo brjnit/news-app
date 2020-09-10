@@ -12,6 +12,7 @@ struct NewsModel {
 	let imageName: String?
 	let title: String
 	let description: String
+	let publishOn: String
 }
 
 enum State {
@@ -21,7 +22,9 @@ enum State {
 
 class ArticleViewModel {
 	private let router: ArticleRouter
-	private(set) var articles: [Article] = []
+	private var articles: [Article] = []
+	private var filteredArticles: [Article] = []
+	private var isSearching: Bool = false
 	let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
 	init(router: ArticleRouter) {
@@ -29,6 +32,7 @@ class ArticleViewModel {
 	}
 
 	func loadArticles(displayUI: @escaping (State) -> Void) {
+		
 		if let dataFromCache = CacheDataProvider.shared.readDataFromCache() {
 			displayUI(.success(models: mapDataForView(articles: dataFromCache)))
 		} else {
@@ -39,44 +43,51 @@ class ArticleViewModel {
 					case .success(let articles):
 						self?.articles = articles
 						self?.saveForOffline(articles: articles)
-						guard let models = self?.mapDataForView(articles: articles) else {
+						let sortedArticles = articles.sorted (by: {
+							self?.sortByDate($0, $1, newToOld: true) as! Bool
+						})
+						guard let models = self?.mapDataForView(articles: sortedArticles) else {
 							return displayUI(.error(error: CustomError.error(message: "Json formating error. ")))
 						}
 						displayUI(.success(models: models))
 					case .failure( let error):
-					//TODO: Add failure case
-						displayUI(.error(error: error))
-//						guard let models = self?.loadForOffline() else {
-//							return displayUI(.error(error: error))
-//						}
-//						displayUI(.success(models: models))
+						guard let models = self?.loadFormOffline() else {
+							return displayUI(.error(error: error))
+						}
+						displayUI(.success(models: models))
 				}
-
 			}
 		}
 	}
 
 	func saveForOffline(articles: [Article]) {
+		CacheDataProvider.shared.setDataToCache(for: articles)
 		LocalDataProvider.shared.clearData()
 		LocalDataProvider.shared.saveData(articles: articles)
-		CacheDataProvider.shared.setDataToCache(for: articles)
 	}
 
-	func loadForOffline() -> [NewsModel] {
+	func loadFormOffline() -> [NewsModel] {
 		let data = LocalDataProvider.shared.loadData()
 		LocalDataProvider.shared.loadImageFromStorage()
+		articles = data
 		return mapDataForView(articles: data)
 	}
 
 	func mapDataForView(articles: [Article]) -> [NewsModel] {
 		return articles.map{ NewsModel(imageName: $0.urlToImage,
 												 title: $0.title,
-												 description: $0.description)
+												 description: $0.description,
+												 publishOn: $0.publishedAt)
 		}
 	}
 
 	func filteredArticles(searchText: String, searchedView: @escaping (State) -> Void) {
-		let filteredArticles = searchText == "" ? articles: articles.filter { ($0.author?.contains(searchText) ?? true)}
+
+		if searchText == "" {
+			filteredArticles = articles
+		} else {
+			filteredArticles = articles.filter { ($0.author?.contains(searchText) ?? false)}
+		}
 		searchedView(.success(models: mapDataForView(articles: filteredArticles)))
 	}
 
@@ -86,17 +97,17 @@ class ArticleViewModel {
 
 	func sortArticles(by newToOld: Bool, sortedView: @escaping (State) -> Void) {
 		let sortedArticles = articles.sorted (by: {
-			sortByDate($0, $1, ascending: newToOld)
+			sortByDate($0, $1, newToOld: newToOld)
 		})
 		sortedView(.success(models: mapDataForView(articles: sortedArticles)))
 	}
 
-	func sortByDate(_ a1: Article, _ a2: Article, ascending: Bool) -> Bool {
+	func sortByDate(_ a1: Article, _ a2: Article, newToOld: Bool) -> Bool {
 		guard let d1 = a1.publishedAt.convertStringToDate(),
 			let d2 = a2.publishedAt.convertStringToDate() else {
 			return false
 		}
-		return ascending ? d1>d2 : d2>d1
+		return newToOld ? d1<d2 : d2<d1
 
 	}
 }

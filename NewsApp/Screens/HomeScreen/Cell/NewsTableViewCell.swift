@@ -15,14 +15,16 @@ class NewsTableViewCell: UITableViewCell {
 		return UINib(nibName: "NewsTableViewCell", bundle: nil)
 
 	}
-	@IBOutlet var titleLabel: UILabel!
-	@IBOutlet var descriptionLabel: UILabel!
-	@IBOutlet  var newsImageView: UIImageView!
+	@IBOutlet private weak var titleLabel: UILabel!
+	@IBOutlet private weak var descriptionLabel: UILabel!
+	@IBOutlet private weak var newsImageView: UIImageView!
+	@IBOutlet private weak var publishOn: UILabel!
 
 	public func configure(with model: NewsModel) {
 		self.newsImageView.loadImage(with: model.imageName)
 		self.titleLabel?.text = model.title
 		self.descriptionLabel?.text = model.description
+		self.publishOn?.text = model.publishOn.formatDate()
 	}
 
 	override func awakeFromNib() {

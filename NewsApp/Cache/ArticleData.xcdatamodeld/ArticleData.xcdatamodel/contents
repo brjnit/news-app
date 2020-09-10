@@ -10,6 +10,6 @@
         <attribute name="urlToImage" optional="YES" attributeType="String"/>
     </entity>
     <elements>
-        <element name="ArticleModel" positionX="-63" positionY="-18" width="128" height="148"/>
+        <element name="ArticleModel" positionX="160" positionY="192" width="128" height="148"/>
     </elements>
 </model>

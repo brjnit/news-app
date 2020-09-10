@@ -13,9 +13,10 @@ class HomeViewController: BaseViewController {
 	private let tableView: UITableView = {
 		let tableView = UITableView()
 		tableView.translatesAutoresizingMaskIntoConstraints = false
+		tableView.separatorStyle = .none
 		return tableView
 	}()
-	private var viewModel: ArticleViewModel!
+	var viewModel: ArticleViewModel!
 
 	private let searchController = UISearchController(searchResultsController: nil)
 	private var sorted: Bool = true
@@ -42,7 +43,6 @@ class HomeViewController: BaseViewController {
 				newsModel = models
 				DispatchQueue.main.async {
 					self.tableView.reloadData()
-
 			}
 			case .error(let error):
 				let alert = UIAlertController(title: "Error",
@@ -56,28 +56,23 @@ class HomeViewController: BaseViewController {
 			}
 		}
 	}
-
-	//MARK: Search View setup
+	
 	func setupSearchView() {
+		tableView.tableHeaderView = searchController.searchBar
 		searchController.searchResultsUpdater = self
 		searchController.obscuresBackgroundDuringPresentation = false
-		searchController.searchBar.placeholder = "Search Articles"
-		searchController.searchBar.barTintColor = #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 1)
-		searchController.searchBar.isTranslucent = false
-		searchController.searchBar.tintColor = .white
-		searchController.searchBar.backgroundImage(for: .topAttached,
-												   barMetrics: .default)
-		self.newToOldBarButton = UIBarButtonItem(image: UIImage(systemName: "arrow.up.square"),  style: .plain, target: self, action: #selector(sortArticles))
-		self.oldToNewBarButton = UIBarButtonItem(image: UIImage(systemName: "arrow.down.square"),  style: .plain, target: self, action: #selector(sortArticles))
-		navigationItem.setRightBarButton(newToOldBarButton, animated: true)
-		navigationItem.searchController = searchController
-		definesPresentationContext = true
+		if let textfield = searchController.searchBar.value(forKey: "searchField") as? UITextField {
+			textfield.textColor = UIColor.black
+		}
+		searchController.searchBar.sizeToFit()
+		searchController.searchBar.backgroundColor = #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 1)
+		searchController.searchBar.placeholder = Constant.searchPlaceholder
 	}
 
 	@objc func sortArticles() {
 		sorted = !sorted
 		self.navigationItem.setRightBarButton((sorted ? newToOldBarButton: oldToNewBarButton), animated: true)
-		viewModel.sortArticles(by: false, sortedView: { [weak self] state in
+		viewModel.sortArticles(by: sorted, sortedView: { [weak self] state in
 			self?.updateView(state: state)
 		})
 	}
@@ -89,6 +84,17 @@ class HomeViewController: BaseViewController {
 		tableView.register(nib, forCellReuseIdentifier: NewsTableViewCell.identifier)
 		tableView.dataSource = self
 		tableView.delegate = self
+		self.newToOldBarButton = UIBarButtonItem(image: UIImage(systemName: Constant.upArrorw),
+												 style: .plain,
+												 target: self,
+												 action: #selector(sortArticles))
+		self.oldToNewBarButton = UIBarButtonItem(image: UIImage(systemName: Constant.downArrorw),
+												 style: .plain,
+												 target: self,
+												 action: #selector(sortArticles))
+		navigationItem.setRightBarButton(newToOldBarButton,
+										 animated: true)
+		definesPresentationContext = true
 	}
 
 	private func setupConstraints() {
@@ -124,11 +130,5 @@ extension HomeViewController: UISearchResultsUpdating {
 				self?.updateView(state: state)
 			}
 		}
-	}
-}
-
-extension HomeViewController: UISearchBarDelegate {
-	func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-		print("selectedScope", selectedScope)
 	}
 }

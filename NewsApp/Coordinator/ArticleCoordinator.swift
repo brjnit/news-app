@@ -17,7 +17,7 @@ class ArticleCoordinator: BaseCoordinator {
 
 	override func start() {
 		let vc = HomeViewController()
-		vc.customNavigationTitle(title: "News")
+		vc.customNavigationTitle(title: Constant.homeScreenTitle)
 		navigationController.pushViewController(vc, animated: true)
 	}
 }

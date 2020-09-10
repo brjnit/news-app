@@ -11,12 +11,21 @@ import CoreData
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
-
-
+	var window: UIWindow?
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-		// Override point for customization after application launch.
+		UIApplication.shared.setMinimumBackgroundFetchInterval(UIApplication.backgroundFetchIntervalMinimum)
+		Reachability().monitorReachabilityChanges()
 		return true
+	}
+
+	func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+		self.window = application.windows.first
+		if let controller = window?.rootViewController as? HomeViewController  {
+			controller.viewModel.loadArticles(displayUI: { state in
+				controller.updateView(state: state)
+			})
+			completionHandler(.newData)
+		}
 	}
 
 	// MARK: - Core Data stack

@@ -22,7 +22,7 @@ class ArticleRouter: RouterProtocol {
 	func routeToNewsDetail(urlString: String) {
 		let newsViewController = NewsDetailViewController()
 		newsViewController.viewModel = NewsDetailViewModel(url: urlString)
-		newsViewController.title = "Article"
+		newsViewController.title = Constant.DeatilScreenTitle
 		viewController.navigationController?.pushViewController(newsViewController, animated: true)
 	}
 }

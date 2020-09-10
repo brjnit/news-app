@@ -25,7 +25,7 @@ class LocalDataProvider {
 	func saveData(articles: [Article]) {
 		_ = articles.map { item in
 			guard let url = URL(string: item.urlToImage) else { return }
-			DispatchQueue.global().async { [weak self] in
+			DispatchQueue.global(qos: .background).async { [weak self] in
 				if let strongSelf = self, let data = try? Data(contentsOf: url) {
 					let imageString = data.base64EncodedString()
 					let contextItem = ArticleModel(context: strongSelf.context)
